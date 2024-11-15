@@ -29,4 +29,15 @@ then
 	exit 2
 fi
 
-echo "8. CHEK OK - Filename recibido correctamente"
+echo "8. CHEK OK - Enviando archivo"
+cat client/$FILE_NAME | nc localhost $PORT
+
+DATA=`nc -l $PORT`
+
+echo "11. COMPROBACION DATA"
+if [ "$DATA" != "OK_DATA" ]
+then
+	echo "ERROR 3: El contenido se envio incorrectamente"
+fi
+
+echo "12. CHECK OK - Datos enviados correctamente"

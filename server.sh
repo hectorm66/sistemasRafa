@@ -24,6 +24,7 @@ DATA=`nc -l $PORT`
 
 echo "5. COMPROBANDO FILENAME"
 PREFIX=`echo "$DATA" | cut -d ' ' -f 1`
+FILE_NAME=`echo "$DATA" | cut -d ' ' -f 2`
 
 if [ "$PREFIX" != "FILE_NAME" ]
 then
@@ -34,3 +35,19 @@ fi
 
 echo "6. CHECK OK - Enviando OK_FILENAME"
 echo "OK_FILE_NAME" | nc localhost $PORT
+
+DATA=`nc -l $PORT`
+
+echo "9. RECIBIENDO Y ALMACENANDO DATOS"
+echo "$DATA" > server/$FILE_NAME
+
+echo "10. COMPROBANDO DATA Y RESPUESTA"
+DRAGON=`cat /home/enti/projects/sistemasRafa/server/dragon.txt`
+if [ "$DATA" != "$DRAGON" ]
+then
+	echo "ERROR 3."
+	echo "KO_DATA"
+	exit 3
+fi
+echo "OK_DATA" | nc localhost $PORT
+cat server/$FILE_NAME
